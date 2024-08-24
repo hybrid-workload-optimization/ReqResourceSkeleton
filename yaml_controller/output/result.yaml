@@ -1,0 +1,95 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: pipeline-test-
+  annotations:
+    pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+    pipelines.kubeflow.org/pipeline_compilation_time: 2024-08-21T17:54:51.739473
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "pipeline test code", "name":
+      "pipeline-test"}'
+  labels:
+    pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+spec:
+  entrypoint: pipeline-test
+  templates:
+  - name: component-a
+    container:
+      name: ""
+      resources:
+        requests:
+          cpu: ""
+          memory: ""
+          gpu: ""
+          ephemeral-storage: ""
+        limits:
+          cpu: "1"
+          memory: 1G
+          gpu: ""
+          ephemeral-storage: ""
+    metadata:
+      generateName: ""
+      annotations: {}
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+  - name: component-b
+    container:
+      name: ""
+      resources:
+        requests:
+          cpu: "0.5"
+          memory: ""
+          gpu: ""
+          ephemeral-storage: ""
+        limits:
+          cpu: "2"
+          memory: ""
+          gpu: ""
+          ephemeral-storage: ""
+    metadata:
+      generateName: ""
+      annotations: {}
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+  - name: component-c
+    container:
+      name: ""
+      resources:
+        requests:
+          cpu: ""
+          memory: 1G
+          gpu: ""
+          ephemeral-storage: ""
+        limits:
+          cpu: ""
+          memory: 2G
+          gpu: ""
+          ephemeral-storage: ""
+    metadata:
+      generateName: ""
+      annotations: {}
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+  - name: pipeline-test
+    dag:
+      tasks:
+      - name: component-a
+        template: component-a
+      - name: component-b
+        template: component-b
+        dependencies:
+        - component-a
+      - name: component-c
+        template: component-c
+        dependencies:
+        - component-b
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner
+  nodeSelector:
+    hostname: Node01

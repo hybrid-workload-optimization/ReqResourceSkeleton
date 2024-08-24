@@ -1,0 +1,66 @@
+version: "0.12"
+request:
+  name: pipeline-test-
+  id: dmkim
+  date: "2024-08-24 12:34:29"
+  containers:
+  - name: component-a
+    resources:
+      requests:
+        cpu: ""
+        memory: ""
+        gpu: ""
+        ephemeral-storage: ""
+      limits:
+        cpu: "1"
+        memory: 1G
+        gpu: ""
+        ephemeral-storage: ""
+  - name: component-b
+    resources:
+      requests:
+        cpu: "0.5"
+        memory: ""
+        gpu: ""
+        ephemeral-storage: ""
+      limits:
+        cpu: "2"
+        memory: ""
+        gpu: ""
+        ephemeral-storage: ""
+  - name: component-c
+    resources:
+      requests:
+        cpu: ""
+        memory: 1G
+        gpu: ""
+        ephemeral-storage: ""
+      limits:
+        cpu: ""
+        memory: 2G
+        gpu: ""
+        ephemeral-storage: ""
+  - name: pipeline-test
+    resources:
+      requests:
+        cpu: ""
+        memory: ""
+        gpu: ""
+        ephemeral-storage: ""
+      limits:
+        cpu: ""
+        memory: ""
+        gpu: ""
+        ephemeral-storage: ""
+  attribute:
+    workloadType: ML
+    isCronJob: true
+    devOpsType: DEV
+    cudaVersion: 342.12
+    gpuDriverVersion: 12.34
+    maxReplicas: 5
+    isNetworking: false
+    totalSize: 875
+    predictedExecutionTime: 599
+    userId: dmkim
+yaml: YXBpVmVyc2lvbjogYXJnb3Byb2ouaW8vdjFhbHBoYTEKa2luZDogV29ya2Zsb3cKbWV0YWRhdGE6CiAgZ2VuZXJhdGVOYW1lOiBwaXBlbGluZS10ZXN0LQogIGFubm90YXRpb25zOiB7cGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9rZnBfc2RrX3ZlcnNpb246IDEuOC4yMiwgcGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9waXBlbGluZV9jb21waWxhdGlvbl90aW1lOiAnMjAyNC0wOC0yMVQxNzo1NDo1MS43Mzk0NzMnLAogICAgcGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9waXBlbGluZV9zcGVjOiAneyJkZXNjcmlwdGlvbiI6ICJwaXBlbGluZSB0ZXN0IGNvZGUiLCAibmFtZSI6CiAgICAgICJwaXBlbGluZS10ZXN0In0nfQogIGxhYmVsczoge3BpcGVsaW5lcy5rdWJlZmxvdy5vcmcva2ZwX3Nka192ZXJzaW9uOiAxLjguMjJ9CnNwZWM6CiAgZW50cnlwb2ludDogcGlwZWxpbmUtdGVzdAogIHRlbXBsYXRlczoKICAtIG5hbWU6IGNvbXBvbmVudC1hCiAgICBjb250YWluZXI6CiAgICAgIGltYWdlOiBuZ2lueDpsYXRlc3QKICAgICAgcmVzb3VyY2VzOgogICAgICAgIGxpbWl0czoge2NwdTogJzEnLCBtZW1vcnk6IDFHfQogICAgbWV0YWRhdGE6CiAgICAgIGxhYmVsczoKICAgICAgICBwaXBlbGluZXMua3ViZWZsb3cub3JnL2tmcF9zZGtfdmVyc2lvbjogMS44LjIyCiAgICAgICAgcGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9waXBlbGluZS1zZGstdHlwZToga2ZwCiAgICAgICAgcGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9lbmFibGVfY2FjaGluZzogInRydWUiCiAgLSBuYW1lOiBjb21wb25lbnQtYgogICAgY29udGFpbmVyOgogICAgICBpbWFnZTogbmdpbng6bGF0ZXN0CiAgICAgIHJlc291cmNlczoKICAgICAgICBsaW1pdHM6IHtjcHU6ICcyJ30KICAgICAgICByZXF1ZXN0czoge2NwdTogJzAuNSd9CiAgICBtZXRhZGF0YToKICAgICAgbGFiZWxzOgogICAgICAgIHBpcGVsaW5lcy5rdWJlZmxvdy5vcmcva2ZwX3Nka192ZXJzaW9uOiAxLjguMjIKICAgICAgICBwaXBlbGluZXMua3ViZWZsb3cub3JnL3BpcGVsaW5lLXNkay10eXBlOiBrZnAKICAgICAgICBwaXBlbGluZXMua3ViZWZsb3cub3JnL2VuYWJsZV9jYWNoaW5nOiAidHJ1ZSIKICAtIG5hbWU6IGNvbXBvbmVudC1jCiAgICBjb250YWluZXI6CiAgICAgIGltYWdlOiBuZ2lueDpsYXRlc3QKICAgICAgcmVzb3VyY2VzOgogICAgICAgIGxpbWl0czoge21lbW9yeTogMkd9CiAgICAgICAgcmVxdWVzdHM6IHttZW1vcnk6IDFHfQogICAgbWV0YWRhdGE6CiAgICAgIGxhYmVsczoKICAgICAgICBwaXBlbGluZXMua3ViZWZsb3cub3JnL2tmcF9zZGtfdmVyc2lvbjogMS44LjIyCiAgICAgICAgcGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9waXBlbGluZS1zZGstdHlwZToga2ZwCiAgICAgICAgcGlwZWxpbmVzLmt1YmVmbG93Lm9yZy9lbmFibGVfY2FjaGluZzogInRydWUiCiAgLSBuYW1lOiBwaXBlbGluZS10ZXN0CiAgICBkYWc6CiAgICAgIHRhc2tzOgogICAgICAtIHtuYW1lOiBjb21wb25lbnQtYSwgdGVtcGxhdGU6IGNvbXBvbmVudC1hfQogICAgICAtIG5hbWU6IGNvbXBvbmVudC1iCiAgICAgICAgdGVtcGxhdGU6IGNvbXBvbmVudC1iCiAgICAgICAgZGVwZW5kZW5jaWVzOiBbY29tcG9uZW50LWFdCiAgICAgIC0gbmFtZTogY29tcG9uZW50LWMKICAgICAgICB0ZW1wbGF0ZTogY29tcG9uZW50LWMKICAgICAgICBkZXBlbmRlbmNpZXM6IFtjb21wb25lbnQtYl0KICBhcmd1bWVudHM6CiAgICBwYXJhbWV0ZXJzOiBbXQogIHNlcnZpY2VBY2NvdW50TmFtZTogcGlwZWxpbmUtcnVubmVyCg==
