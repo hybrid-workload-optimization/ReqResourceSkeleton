@@ -18,14 +18,14 @@ type Spec struct {
 	Templates          []Template `yaml:"templates"`
 	Arguments          Arguments  `yaml:"arguments"`
 	ServiceAccountName string     `yaml:"serviceAccountName"`
-	NodeSelector       NodeSelect `yaml:"nodeSelector"`
 }
 
 type Template struct {
-	Name      string     `yaml:"name"`
-	Container *Container `yaml:"container,omitempty"`
-	Metadata  *Metadata  `yaml:"metadata,omitempty"`
-	DAG       *DAG       `yaml:"dag,omitempty"`
+	Name         string     `yaml:"name"`
+	Container    *Container `yaml:"container,omitempty"`
+	Metadata     *Metadata  `yaml:"metadata,omitempty"`
+	NodeSelector NodeSelect `yaml:"nodeSelector"`
+	DAG          *DAG       `yaml:"dag,omitempty"`
 }
 
 type ContainerResources struct {
@@ -48,5 +48,5 @@ type Arguments struct {
 }
 
 type NodeSelect struct {
-	Node string `yaml:"hostname"`
+	Node string `yaml:"kubernetes.io/hostname"`
 }

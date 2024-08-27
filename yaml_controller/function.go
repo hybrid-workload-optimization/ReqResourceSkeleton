@@ -23,6 +23,13 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 	// yaml file encoding by base64
 	encodedData := base64.StdEncoding.EncodeToString(data)
 
+	// Container 키의 개수 확인
+	containerCount := 0
+	for _, template := range workflow.Spec.Templates {
+		if template.Container != nil {
+			containerCount++
+		}
+	}
 	//////////////////////////////////////////////////////////////
 	// made resource request yaml file (send to kware)
 	reqYaml := ys.ReqResource{}
@@ -36,15 +43,14 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 	reqYaml.Request.ID = uuid
 	reqYaml.Request.Date = nowTime
 
-	size := len(workflow.Spec.Templates)
-	containers := make([]ys.Container, size)
+	containers := make([]ys.Container, containerCount)
 
 	for idx, value := range workflow.Spec.Templates {
 
 		if value.Container == nil {
 			// fmt.Println("NIL: " + value.Name)
-			// DAG 처리 및 구조 정의 필요
-			containers[idx].Name = value.Name
+
+			continue
 		} else {
 			// fmt.Println("NOT NIL: " + value.Name)
 			containers[idx].Name = value.Name
@@ -73,7 +79,7 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 	reqYaml.Request.Attribute.PredictedExecutionTime = 599
 	reqYaml.Request.Attribute.UserID = uuid
 
-	reqYaml.Yaml = encodedData
+	reqYaml.Request.Attribute.Yaml = encodedData
 	//////////////////////////////////////////////////////////////
 
 	ack, body := SEND_REST_DATA(argAddr, reqYaml)
@@ -84,7 +90,14 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 		err = yaml.Unmarshal([]byte(body), &ackBody)
 		check(err)
 
-		workflow.Spec.NodeSelector.Node = ackBody.Response.Result.Node
+		// log.Println(body)
+		for _, val := range ackBody.Response.Container {
+			for idx, _ := range workflow.Spec.Templates {
+				if workflow.Spec.Templates[idx].Name == val.Name {
+					workflow.Spec.Templates[idx].NodeSelector.Node = val.Node
+				}
+			}
+		}
 
 		MakeYamlFile(workflow, argOutputPath)
 

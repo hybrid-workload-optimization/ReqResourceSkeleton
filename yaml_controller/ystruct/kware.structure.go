@@ -3,7 +3,6 @@ package ystruct
 type ReqResource struct {
 	Version string  `yaml:"version"`
 	Request Request `yaml:"request"`
-	Yaml    string  `yaml:"yaml"`
 }
 
 type Request struct {
@@ -25,6 +24,7 @@ type Attribute struct {
 	TotalSize              int     `yaml:"totalSize"`
 	PredictedExecutionTime int     `yaml:"predictedExecutionTime"`
 	UserID                 string  `yaml:"userId"`
+	Yaml                   string  `yaml:"yaml"`
 }
 
 type RespResource struct {
@@ -32,9 +32,12 @@ type RespResource struct {
 }
 
 type Response struct {
-	ID     string `yaml:"id"`
-	Date   string `yaml:"date"`
-	Result Result `yaml:"result"`
+	ID               string      `yaml:"id"`
+	Date             string      `yaml:"date"`
+	Container        []Container `yaml:"container,omitempty"`
+	PriorityClass    string      `yaml:"priorityClass"`
+	Priority         string      `yaml:"string"`
+	PreemptionPolicy string      `yaml:"preemptionPolicy"`
 }
 
 type Result struct {

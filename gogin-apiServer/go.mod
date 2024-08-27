@@ -6,6 +6,7 @@ replace main/ystruct => ../yaml_controller/ystruct
 
 require (
 	github.com/gin-gonic/gin v1.10.0
+	gopkg.in/yaml.v2 v2.4.0
 	main/ystruct v0.0.0-00010101000000-000000000000
 )
 

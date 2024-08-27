@@ -26,6 +26,8 @@ spec:
           memory: 1G
           gpu: ""
           ephemeral-storage: ""
+      cluster: ""
+      node: ""
     metadata:
       generateName: ""
       annotations: {}
@@ -33,6 +35,8 @@ spec:
         pipelines.kubeflow.org/enable_caching: "true"
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: component-a-KETI
   - name: component-b
     container:
       name: ""
@@ -47,6 +51,8 @@ spec:
           memory: ""
           gpu: ""
           ephemeral-storage: ""
+      cluster: ""
+      node: ""
     metadata:
       generateName: ""
       annotations: {}
@@ -54,6 +60,8 @@ spec:
         pipelines.kubeflow.org/enable_caching: "true"
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: component-b-KETI
   - name: component-c
     container:
       name: ""
@@ -68,6 +76,8 @@ spec:
           memory: 2G
           gpu: ""
           ephemeral-storage: ""
+      cluster: ""
+      node: ""
     metadata:
       generateName: ""
       annotations: {}
@@ -75,7 +85,11 @@ spec:
         pipelines.kubeflow.org/enable_caching: "true"
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: component-c-KETI
   - name: pipeline-test
+    nodeSelector:
+      kubernetes.io/hostname: ""
     dag:
       tasks:
       - name: component-a
@@ -91,5 +105,3 @@ spec:
   arguments:
     parameters: []
   serviceAccountName: pipeline-runner
-  nodeSelector:
-    hostname: Node01
