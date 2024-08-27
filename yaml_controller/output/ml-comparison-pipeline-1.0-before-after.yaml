@@ -1,0 +1,111 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ml-pipeline-
+  annotations:
+    pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+    pipelines.kubeflow.org/pipeline_compilation_time: 2023-04-10T13:03:18.882127
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "demo of anomaly detetction
+      pipeline", "inputs": [{"default": "/mnt/kubeflow", "name": "directory", "optional":
+      true}], "name": "ml-pipeline"}'
+  labels:
+    pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+spec:
+  entrypoint: ml-pipeline
+  templates:
+  - name: ml-pipeline
+    dag:
+      tasks:
+      - name: preprocessing-uci-secom-dataset
+        template: preprocessing-uci-secom-dataset
+      - name: training-elliptic-envelop-model
+        template: training-elliptic-envelop-model
+        dependencies:
+        - preprocessing-uci-secom-dataset
+      - name: training-isolation-forest-model
+        template: training-isolation-forest-model
+        dependencies:
+        - preprocessing-uci-secom-dataset
+      - name: training-lof-model
+        template: training-lof-model
+        dependencies:
+        - preprocessing-uci-secom-dataset
+      - name: training-one-class-svm-model
+        template: training-one-class-svm-model
+        dependencies:
+        - preprocessing-uci-secom-dataset
+  - name: preprocessing-uci-secom-dataset
+    container:
+      resources:
+        requests:
+          cpu: "1.5"
+          memory: 1G
+        limits:
+          cpu: "2"
+          memory: 2G
+    metadata:
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: preprocessing-uci-secom-dataset-KETI
+  - name: training-elliptic-envelop-model
+    container:
+      resources:
+        requests:
+          memory: 1G
+        limits:
+          cpu: "2"
+          memory: 2G
+    metadata:
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: training-elliptic-envelop-model-KETI
+  - name: training-isolation-forest-model
+    container:
+      resources:
+        requests:
+          cpu: "1.5"
+          memory: 1G
+        limits:
+          memory: 2G
+    metadata:
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: training-isolation-forest-model-KETI
+  - name: training-lof-model
+    container:
+      resources:
+        requests:
+          cpu: "1.5"
+          memory: 1G
+        limits:
+          cpu: "2"
+          memory: 2G
+    metadata:
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: training-lof-model-KETI
+  - name: training-one-class-svm-model
+    container: {}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/enable_caching: "true"
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    nodeSelector:
+      kubernetes.io/hostname: training-one-class-svm-model-KETI
+  arguments:
+    parameters:
+    - name: directory
+      value: /mnt/kubeflow

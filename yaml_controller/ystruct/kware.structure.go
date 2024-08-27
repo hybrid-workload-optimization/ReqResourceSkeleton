@@ -1,49 +1,49 @@
 package ystruct
 
 type ReqResource struct {
-	Version string  `yaml:"version"`
-	Request Request `yaml:"request"`
+	Version string  `yaml:"version,omitempty"`
+	Request Request `yaml:"request,omitempty"`
 }
 
 type Request struct {
-	Name       string      `yaml:"name"`
-	ID         string      `yaml:"id"`
-	Date       string      `yaml:"date"`
-	Containers []Container `yaml:"containers"`
-	Attribute  Attribute   `yaml:"attribute"`
+	Name       string      `yaml:"name,omitempty"`
+	ID         string      `yaml:"id,omitempty"`
+	Date       string      `yaml:"date,omitempty"`
+	Containers []Container `yaml:"containers,omitempty"`
+	Attribute  Attribute   `yaml:"attribute,omitempty"`
 }
 
 type Attribute struct {
-	WorkloadType           string  `yaml:"workloadType"`
-	IsCronJob              bool    `yaml:"isCronJob"`
-	DevOpsType             string  `yaml:"devOpsType"`
-	CudaVersion            float64 `yaml:"cudaVersion"`
-	GPUDriverVersion       float64 `yaml:"gpuDriverVersion"`
-	MaxReplicas            int     `yaml:"maxReplicas"`
-	IsNetworking           bool    `yaml:"isNetworking"`
-	TotalSize              int     `yaml:"totalSize"`
-	PredictedExecutionTime int     `yaml:"predictedExecutionTime"`
-	UserID                 string  `yaml:"userId"`
-	Yaml                   string  `yaml:"yaml"`
+	WorkloadType           string  `yaml:"workloadType,omitempty"`
+	IsCronJob              bool    `yaml:"isCronJob,omitempty"`
+	DevOpsType             string  `yaml:"devOpsType,omitempty"`
+	CudaVersion            float64 `yaml:"cudaVersion,omitempty"`
+	GPUDriverVersion       float64 `yaml:"gpuDriverVersion,omitempty"`
+	MaxReplicas            int     `yaml:"maxReplicas,omitempty"`
+	IsNetworking           bool    `yaml:"isNetworking,omitempty"`
+	TotalSize              int     `yaml:"totalSize,omitempty"`
+	PredictedExecutionTime int     `yaml:"predictedExecutionTime,omitempty"`
+	UserID                 string  `yaml:"userId,omitempty"`
+	Yaml                   string  `yaml:"yaml,omitempty"`
 }
 
 type RespResource struct {
-	Response Response `yaml:"response"`
+	Response Response `yaml:"response,omitempty"`
 }
 
 type Response struct {
-	ID               string      `yaml:"id"`
-	Date             string      `yaml:"date"`
+	ID               string      `yaml:"id,omitempty"`
+	Date             string      `yaml:"date,omitempty"`
 	Container        []Container `yaml:"container,omitempty"`
-	PriorityClass    string      `yaml:"priorityClass"`
-	Priority         string      `yaml:"string"`
-	PreemptionPolicy string      `yaml:"preemptionPolicy"`
+	PriorityClass    string      `yaml:"priorityClass,omitempty"`
+	Priority         string      `yaml:"priority,omitempty"`
+	PreemptionPolicy string      `yaml:"preemptionPolicy,omitempty"`
 }
 
 type Result struct {
-	Cluster          string `yaml:"cluster"`
-	Node             string `yaml:"node"`
-	PriorityClass    string `yaml:"priorityClass"`
-	Priority         string `yaml:"string"`
-	PreemptionPolicy string `yaml:"preemptionPolicy"`
+	Cluster          string `yaml:"cluster,omitempty"`
+	Node             string `yaml:"node,omitempty"`
+	PriorityClass    string `yaml:"priorityClass,omitempty"`
+	Priority         string `yaml:"priority,omitempty"`
+	PreemptionPolicy string `yaml:"preemptionPolicy,omitempty"`
 }

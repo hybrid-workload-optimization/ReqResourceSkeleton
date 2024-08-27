@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"os"
 
-	ys "main/ystruct"
-
 	"gopkg.in/yaml.v2"
 )
 
@@ -32,37 +30,6 @@ func SEND_REST_DATA(argAddr string, argYamlData interface{}) (*http.Response, st
 	check(err)
 
 	return resp, string(body)
-}
-
-func ReadYaml(argPath string) {
-	// Open the YAML file
-	file, err := os.Open(argPath)
-	if err != nil {
-		fmt.Printf("Error opening file: %v\n", err)
-		return
-	}
-	defer file.Close()
-
-	// Read the file content
-	data, err := ioutil.ReadAll(file)
-	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
-		return
-	}
-
-	// Unmarshal the YAML data into the struct
-	var config ys.Example
-	err = yaml.Unmarshal(data, &config)
-	if err != nil {
-		fmt.Printf("Error unmarshaling YAML: %v\n", err)
-		return
-	}
-
-	// Print the content of the struct
-	fmt.Printf("Server: %s\n", config.Server)
-	fmt.Printf("Port: %d\n", config.Port)
-	fmt.Printf("Database Username: %s\n", config.Database.Username)
-	fmt.Printf("Database Password: %s\n", config.Database.Password)
 }
 
 func MakeYamlFile(argData interface{}, argPath string) {

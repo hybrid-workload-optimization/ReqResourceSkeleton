@@ -30,6 +30,7 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 			containerCount++
 		}
 	}
+
 	//////////////////////////////////////////////////////////////
 	// made resource request yaml file (send to kware)
 	reqYaml := ys.ReqResource{}
@@ -45,7 +46,7 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 
 	containers := make([]ys.Container, containerCount)
 
-	for idx, value := range workflow.Spec.Templates {
+	for _, value := range workflow.Spec.Templates {
 
 		if value.Container == nil {
 			// fmt.Println("NIL: " + value.Name)
@@ -53,17 +54,26 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 			continue
 		} else {
 			// fmt.Println("NOT NIL: " + value.Name)
-			containers[idx].Name = value.Name
-			containers[idx].Resources.Requests.CPU = value.Container.Resources.Requests.CPU
-			containers[idx].Resources.Requests.CPU = value.Container.Resources.Requests.CPU
-			containers[idx].Resources.Requests.GPU = value.Container.Resources.Requests.GPU
-			containers[idx].Resources.Requests.Memory = value.Container.Resources.Requests.Memory
-			containers[idx].Resources.Requests.EphemeralStorage = value.Container.Resources.Requests.EphemeralStorage
 
-			containers[idx].Resources.Limits.CPU = value.Container.Resources.Limits.CPU
-			containers[idx].Resources.Limits.GPU = value.Container.Resources.Limits.GPU
-			containers[idx].Resources.Limits.Memory = value.Container.Resources.Limits.Memory
-			containers[idx].Resources.Limits.EphemeralStorage = value.Container.Resources.Limits.EphemeralStorage
+			tmpContainer := ys.Container{
+				Name: value.Name,
+				Resources: ys.Resources{
+					Requests: ys.ResourceDetails{
+						CPU:              value.Container.Resources.Requests.CPU,
+						GPU:              value.Container.Resources.Requests.GPU,
+						Memory:           value.Container.Resources.Requests.Memory,
+						EphemeralStorage: value.Container.Resources.Requests.EphemeralStorage,
+					},
+					Limits: ys.ResourceDetails{
+						CPU:              value.Container.Resources.Limits.CPU,
+						GPU:              value.Container.Resources.Limits.GPU,
+						Memory:           value.Container.Resources.Limits.Memory,
+						EphemeralStorage: value.Container.Resources.Limits.EphemeralStorage,
+					},
+				},
+			}
+
+			containers = append(containers, tmpContainer)
 		}
 	}
 	reqYaml.Request.Containers = containers

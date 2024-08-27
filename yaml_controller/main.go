@@ -7,8 +7,11 @@ var FINAL_YAML_PATH = "/final"
 func main() {
 
 	restURL := BASE_URL + RESOURCE_PATH
-	oriPath := "./input/sample.yaml"
-	resultPath := "./output/result.yaml"
+
+	fileName := "ml-comparison-pipeline-1.0-before"
+
+	oriPath := "./input/" + fileName + ".yaml"
+	resultPath := "./output/" + fileName + "-after.yaml"
 
 	MadeFinalWorkloadYAML(restURL, oriPath, resultPath)
 
