@@ -1,107 +1,74 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: pipeline-test-
   annotations:
     pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
     pipelines.kubeflow.org/pipeline_compilation_time: 2024-08-21T17:54:51.739473
     pipelines.kubeflow.org/pipeline_spec: '{"description": "pipeline test code", "name":
       "pipeline-test"}'
+  generateName: pipeline-test-
   labels:
     pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
 spec:
+  arguments:
+    parameters: []
   entrypoint: pipeline-test
+  serviceAccountName: pipeline-runner
   templates:
-  - name: component-a
-    container:
-      name: ""
+  - container:
+      image: nginx:latest
       resources:
-        requests:
-          cpu: ""
-          memory: ""
-          gpu: ""
-          ephemeral-storage: ""
         limits:
           cpu: "1"
           memory: 1G
-          gpu: ""
-          ephemeral-storage: ""
-      cluster: ""
-      node: ""
     metadata:
-      generateName: ""
-      annotations: {}
       labels:
         pipelines.kubeflow.org/enable_caching: "true"
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    name: component-a
     nodeSelector:
       kubernetes.io/hostname: component-a-KETI
-  - name: component-b
-    container:
-      name: ""
+  - container:
+      image: nginx:latest
       resources:
-        requests:
-          cpu: "0.5"
-          memory: ""
-          gpu: ""
-          ephemeral-storage: ""
         limits:
           cpu: "2"
-          memory: ""
-          gpu: ""
-          ephemeral-storage: ""
-      cluster: ""
-      node: ""
+        requests:
+          cpu: "0.5"
     metadata:
-      generateName: ""
-      annotations: {}
       labels:
         pipelines.kubeflow.org/enable_caching: "true"
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    name: component-b
     nodeSelector:
       kubernetes.io/hostname: component-b-KETI
-  - name: component-c
-    container:
-      name: ""
+  - container:
+      image: nginx:latest
       resources:
-        requests:
-          cpu: ""
-          memory: 1G
-          gpu: ""
-          ephemeral-storage: ""
         limits:
-          cpu: ""
           memory: 2G
-          gpu: ""
-          ephemeral-storage: ""
-      cluster: ""
-      node: ""
+        requests:
+          memory: 1G
     metadata:
-      generateName: ""
-      annotations: {}
       labels:
         pipelines.kubeflow.org/enable_caching: "true"
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
+    name: component-c
     nodeSelector:
       kubernetes.io/hostname: component-c-KETI
-  - name: pipeline-test
-    nodeSelector:
-      kubernetes.io/hostname: ""
-    dag:
+  - dag:
       tasks:
       - name: component-a
         template: component-a
-      - name: component-b
-        template: component-b
-        dependencies:
+      - dependencies:
         - component-a
-      - name: component-c
-        template: component-c
-        dependencies:
+        name: component-b
+        template: component-b
+      - dependencies:
         - component-b
-  arguments:
-    parameters: []
-  serviceAccountName: pipeline-runner
+        name: component-c
+        template: component-c
+    name: pipeline-test

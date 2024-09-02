@@ -38,6 +38,8 @@ spec:
         name: training-one-class-svm-model
         template: training-one-class-svm-model
     name: ml-pipeline
+    nodeSelector:
+      kubernetes.io/hostname: dmkim22222
   - container:
       image: chromatices/preprocessing-uci-secom:latest
       resources:
@@ -56,8 +58,6 @@ spec:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
     name: preprocessing-uci-secom-dataset
-    nodeSelector:
-      kubernetes.io/hostname: preprocessing-uci-secom-dataset-KETI
     volumes:
     - name: data
       nfs:
@@ -80,8 +80,6 @@ spec:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
     name: training-elliptic-envelop-model
-    nodeSelector:
-      kubernetes.io/hostname: training-elliptic-envelop-model-KETI
     volumes:
     - name: data
       nfs:
@@ -104,8 +102,6 @@ spec:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
     name: training-isolation-forest-model
-    nodeSelector:
-      kubernetes.io/hostname: training-isolation-forest-model-KETI
     volumes:
     - name: data
       nfs:
@@ -129,8 +125,6 @@ spec:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
     name: training-lof-model
-    nodeSelector:
-      kubernetes.io/hostname: training-lof-model-KETI
     volumes:
     - name: data
       nfs:
@@ -147,8 +141,6 @@ spec:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.20
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
     name: training-one-class-svm-model
-    nodeSelector:
-      kubernetes.io/hostname: training-one-class-svm-model-KETI
     volumes:
     - name: data
       nfs:

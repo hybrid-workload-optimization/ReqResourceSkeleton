@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
+	"io/ioutil"
+	"log"
 	ys "main/ystruct"
 	"net/http"
 	"os"
@@ -11,7 +13,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
+func ReqResourceAllocInfo(argAddr, argInputPath string) ys.RespResource {
 	var err error
 	data, err := os.ReadFile(argInputPath)
 	check(err)
@@ -22,14 +24,6 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 
 	// yaml file encoding by base64
 	encodedData := base64.StdEncoding.EncodeToString(data)
-
-	// Container 키의 개수 확인
-	containerCount := 0
-	for _, template := range workflow.Spec.Templates {
-		if template.Container != nil {
-			containerCount++
-		}
-	}
 
 	//////////////////////////////////////////////////////////////
 	// made resource request yaml file (send to kware)
@@ -43,8 +37,6 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 	reqYaml.Request.Name = workflow.Metadata.GenerateName
 	reqYaml.Request.ID = uuid
 	reqYaml.Request.Date = nowTime
-
-	containers := make([]ys.Container, containerCount)
 
 	for _, value := range workflow.Spec.Templates {
 
@@ -72,11 +64,9 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 					},
 				},
 			}
-
-			containers = append(containers, tmpContainer)
+			reqYaml.Request.Containers = append(reqYaml.Request.Containers, tmpContainer)
 		}
 	}
-	reqYaml.Request.Containers = containers
 
 	reqYaml.Request.Attribute.WorkloadType = "ML"
 	reqYaml.Request.Attribute.IsCronJob = true
@@ -92,33 +82,57 @@ func MadeFinalWorkloadYAML(argAddr, argInputPath, argOutputPath string) {
 	reqYaml.Request.Attribute.Yaml = encodedData
 	//////////////////////////////////////////////////////////////
 
+	var ackBody ys.RespResource
+
 	ack, body := SEND_REST_DATA(argAddr, reqYaml)
 	if ack.StatusCode == http.StatusOK {
-		fmt.Println("=== Request successful ===")
-
-		var ackBody ys.RespResource
+		// fmt.Println("=== Request successful ===")
 		err = yaml.Unmarshal([]byte(body), &ackBody)
 		check(err)
 
-		// log.Println(body)
-		for _, val := range ackBody.Response.Container {
-			for idx, _ := range workflow.Spec.Templates {
-				if workflow.Spec.Templates[idx].Name == val.Name {
-					workflow.Spec.Templates[idx].NodeSelector.Node = val.Node
-				}
-			}
-		}
-
-		MakeYamlFile(workflow, argOutputPath)
-
-		// send final yaml data to kware
-		ack, _ := SEND_REST_DATA(BASE_URL+FINAL_YAML_PATH, workflow)
-		if ack.StatusCode == http.StatusOK {
-			fmt.Println("=== Done ===")
-		} else {
-			fmt.Printf("[FinalYAML] Request failed with status: %s\n", ack.Status)
-		}
 	} else {
 		fmt.Printf("[ReqResource] Request failed with status: %s\n", ack.Status)
 	}
+
+	return ackBody
+}
+
+func MadeFinalWorkloadYAML(argBody ys.RespResource, argInputPath, argOutputPath string) map[string]interface{} {
+
+	// YAML 파일 읽기
+	yamlFile, err := ioutil.ReadFile(argInputPath)
+	if err != nil {
+		log.Fatalf("Error reading YAML file: %v", err)
+	}
+
+	// YAML 데이터를 저장할 변수
+	var data map[string]interface{}
+
+	// YAML 데이터 언마샬링
+	err = yaml.Unmarshal(yamlFile, &data)
+	if err != nil {
+		log.Fatalf("Error unmarshalling YAML data: %v", err)
+	}
+
+	// templates 섹션에서 모든 container의 image 값을 출력하고 조건에 따라 새로운 키를 추가
+	spec, ok := data["spec"].(map[interface{}]interface{})
+	if ok {
+		templates, ok := spec["templates"].([]interface{})
+		if ok {
+			for _, template := range templates {
+				templateMap, ok := template.(map[interface{}]interface{})
+				if ok {
+					for _, val := range argBody.Response.Container {
+						if templateMap["name"] == val.Name {
+							templateMap["nodeSelector"] = ys.NodeSelect{
+								Node: val.Node,
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return data
 }

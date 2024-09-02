@@ -53,7 +53,7 @@ func ResourceHandler(ctx *gin.Context) {
 			Container:        containers,
 			PriorityClass:    "TEST-Class",
 			Priority:         "100000",
-			PreemptionPolicy: "Naver",
+			PreemptionPolicy: "Never",
 		},
 	})
 }
