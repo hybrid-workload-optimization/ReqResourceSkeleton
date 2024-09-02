@@ -19,8 +19,6 @@ func main() {
 	oriPath := "./input/" + fileName + ".yaml"
 	resultPath := "./output/" + fileName + "-after.yaml"
 
-	// MadeFinalWorkloadYAML(restURL, oriPath, resultPath)
-
 	// first. request information by node allocator
 	ackBody := ReqResourceAllocInfo(restURL, oriPath)
 
